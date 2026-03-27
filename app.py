@@ -20,7 +20,20 @@ def products(id):
 def product_query(name:str = Query(default=None, 
   min_length=1,
   max_length=50,
-  description="Search By Product Name")) -> dict:
+  description="Search By Product Name"),
+  price_min:float = Query(
+      default=None, 
+      min_length=1,
+      max_length=8,
+      description="Provide the MINIMUM price of the product that you want to see"
+  ),
+  price_max:float = Query(
+      default=None,
+      min_length=1,
+      max_length=8,
+      description="Provide the MAXIMUM price of the product that you want to see"
+  )
+  ) -> dict:
 
     whole_list = process_data()
     if name:
@@ -29,8 +42,24 @@ def product_query(name:str = Query(default=None,
         if not matches:
             raise HTTPException(status_code=404,detail=f"No matches found for your search, '{name}'")
     
-        return {
+        to_return_name = {
             "total":len(matches), "items":matches
         }
+    
+    if price_min:
+        matches = [m for m in whole_list if m["price"] >= price_min]
+        if not matches:
+            raise HTTPException(status_code=404,detail=f"No matches found for your search, 'Minimum price = {price_min}'")
+        to_return_price_min = {
+            "total":len(matches), "items":matches
+        }
+    if price_max:
+        matches = [m for m in whole_list if m["price"] <= price_min]
+        if not matches:
+            raise HTTPException(status_code=404,detail=f"No matches found for your search, 'Maximum price = {price_max}'")
+        to_return_price_max = {
+            "total":len(matches), "items":matches
+        }
+
     else: 
         return {"total":len(whole_list),"items":whole_list}
