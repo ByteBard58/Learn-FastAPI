@@ -16,7 +16,7 @@ def products(id):
         if id == dickt["id"]:
             return dickt
 
-@app.get("/products")
+@app.get("/product")
 def product_query(
   name:str = Query(default=None, 
        min_length=1,
