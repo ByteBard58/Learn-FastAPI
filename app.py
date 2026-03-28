@@ -1,6 +1,7 @@
 from fastapi import FastAPI, Query, HTTPException,Path
 import numpy as np
 from product import process_data
+from schema.product_rule import Item
 
 app = FastAPI()
 
@@ -70,3 +71,7 @@ def product_query(
             return {"total":len(results),"items":results}
     
     return {"total":len(results),"items":results}
+
+@app.post("/product",status_code=201)
+def create_product(product:Item):
+    return product
