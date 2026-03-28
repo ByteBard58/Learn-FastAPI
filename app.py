@@ -10,11 +10,20 @@ def home():
     return dictt
 
 @app.get("/product/{id}")
-def products(id):
+def products(
+    id:str = Path(
+        min_length= 36,
+        max_length= 36,
+        description="Provide the id of the product",
+        examples="0005a4ea-ce3f-4dd7-bee0-f4ccc70fea6a"
+    )
+):
     whole_list = process_data()
-    for dickt in whole_list:
-        if id == dickt["id"]:
-            return dickt
+    dickt:list[dict] = [r for r in whole_list if r["id"] == id]
+    if not dickt:
+        raise HTTPException(status_code=404, detail=f"Product of id = {id} not found")
+    else:
+        return dickt
 
 @app.get("/product")
 def product_query(
