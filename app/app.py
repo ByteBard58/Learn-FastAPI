@@ -74,7 +74,6 @@ def product_query(
 @app.post("/product",status_code=201)
 def create_product(product:Item):
     product = product.model_dump(mode="json")
-    product["id"] = str(uuid4())
     try:
         add_data(product)
         return {

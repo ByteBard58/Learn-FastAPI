@@ -212,5 +212,106 @@
     },
     "created_at": "2026-03-29T06:18:22.309034Z",
     "final_price": 80522.1
+  },
+  {
+    "id": "43a22120-cb9e-417b-a17a-138444cb59fb",
+    "sku": "SAMS-383GB-892",
+    "name": "Samsung Model Note",
+    "description": "Official Samsung product with manufacturer warranty",
+    "category": "mobiles",
+    "brand": "Samsung",
+    "price": 69990.0,
+    "currency": "INR",
+    "discount_percent": 5.0,
+    "stock": 7,
+    "is_active": true,
+    "rating": 3.4,
+    "tags": null,
+    "image_urls": [
+      "https://cdn.example.com/samsung/front.png",
+      "https://cdn.example.com/samsung/back.png"
+    ],
+    "dimensions_cm": {
+      "length": 4.2,
+      "width": 2.0,
+      "height": 8.9,
+      "volume": 74.76
+    },
+    "seller": {
+      "seller_id": "10c5a2ed-9d63-40ef-85f2-9700294fb743",
+      "name": "Samsung India",
+      "email": "support@samsungindia.in",
+      "website": "https://www.samsungindia.in/"
+    },
+    "created_at": "2026-03-29T06:41:36.412719Z",
+    "final_price": 66490.5
+  },
+  {
+    "id": "cee9c6f5-39ca-457d-91ea-687d3c83e895",
+    "sku": "SAMS-383GB-032",
+    "name": "Samsung Model Max",
+    "description": "Official Samsung product with manufacturer warranty",
+    "category": "mobiles",
+    "brand": "Samsung",
+    "price": 101999.0,
+    "currency": "INR",
+    "discount_percent": 15.0,
+    "stock": 0,
+    "is_active": false,
+    "rating": 3.4,
+    "tags": null,
+    "image_urls": [
+      "https://cdn.example.com/samsung/front.png",
+      "https://cdn.example.com/samsung/back.png"
+    ],
+    "dimensions_cm": {
+      "length": 14.2,
+      "width": 22.0,
+      "height": 8.9,
+      "volume": 2780.36
+    },
+    "seller": {
+      "seller_id": "10c5a2ed-9d63-40ef-85f2-9700294fb743",
+      "name": "Samsung India",
+      "email": "support@samsungindia.in",
+      "website": "https://www.samsungindia.in/"
+    },
+    "created_at": "2026-03-29T06:42:59.390960Z",
+    "final_price": 86699.15
+  },
+  {
+    "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+    "sku": "XIAO-359GB-001",
+    "name": "Xiaomi Model Pro",
+    "description": "string",
+    "category": "mobiles",
+    "brand": "Lenovo",
+    "price": 579.5,
+    "currency": "INR",
+    "discount_percent": 0.0,
+    "stock": 123,
+    "is_active": true,
+    "rating": 5.0,
+    "tags": [
+      "gaming",
+      "chocolate"
+    ],
+    "image_urls": [
+      "https://example.com/"
+    ],
+    "dimensions_cm": {
+      "length": 1.0,
+      "width": 1.0,
+      "height": 1.0,
+      "volume": 1.0
+    },
+    "seller": {
+      "seller_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "name": "Asus Exclusive",
+      "email": "support@asusexclusive.in",
+      "website": "https://www.asusexclusive.in/"
+    },
+    "created_at": "2026-03-29T06:45:09.606000Z",
+    "final_price": 579.5
   }
 ]

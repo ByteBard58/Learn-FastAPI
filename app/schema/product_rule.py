@@ -2,7 +2,7 @@ from pydantic import (BaseModel, Field, AnyUrl,
         model_validator, field_validator, computed_field, EmailStr)
 from typing import Annotated, Literal, List, Optional
 from datetime import datetime, timezone
-from uuid import UUID
+from uuid import UUID, uuid4
 from Data.product import process_data
 from pathlib import Path
 
@@ -63,7 +63,7 @@ class dimensions_cm(BaseModel):
      return round(volume,2)
 
 class Item(BaseModel):
-  id : UUID
+  id : UUID = Field(default_factory=lambda:uuid4())
   sku : Annotated[str,Field(...,
     min_length= 4, max_length= 30,
     description= "Stock Keeping Unit (required)",
