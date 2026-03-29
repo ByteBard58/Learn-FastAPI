@@ -1,7 +1,41 @@
-from pydantic import BaseModel, Field, AnyUrl
+from pydantic import (BaseModel, Field, AnyUrl, 
+        model_validator, field_validator, computed_field, EmailStr)
 from typing import Annotated, Literal, List, Optional
 from datetime import datetime, timezone
 from uuid import UUID
+
+class seller(BaseModel):
+   seller_id: UUID
+   name : Annotated[str,Field(
+      ..., min_length=3,max_length=25,
+      description="Name of the seller (required)", examples=["Asus Exclusive","Lenovo Store"]
+   )]
+   email : Annotated[EmailStr,Field(
+      ..., description="Email address of the seller (required)"
+   )]
+   website : Annotated[AnyUrl,Field(
+      ..., description="Website URL of the seller (required)"
+   )]
+
+class dimensions_cm(BaseModel):
+  length : Annotated[float,Field(
+     ..., description="Length of the product in cm unit (required)",
+     gt=0
+  )]
+  width : Annotated[float,Field(
+     ..., description="Width of the product in cm unit (required)",
+     gt=0
+  )]
+  height : Annotated[float,Field(
+     ..., description="Height of the product in cm unit (required)",
+     gt=0
+  )]
+
+  @computed_field(return_type=float)
+  @property
+  def volume(self):
+     volume = self.length * self.width * self.height
+     return round(volume,2)
 
 class Item(BaseModel):
   id : UUID
@@ -53,13 +87,34 @@ class Item(BaseModel):
   )] = None
   tags : Annotated[Optional[List[str]],Field(
     description="Tags assigned to the product (optional)",
-    max_items=10, 
+    max_length=10, 
     examples=[["gaming","chocolate"],["drinks","clothes"]]
   )] = None
   image_urls : Annotated[List[AnyUrl],Field(
     ..., min_length=1,
     description="URLs of images of the product (required)"
   )]
-  # dimensions_cm
-  # seller
+  dimensions_cm : dimensions_cm
+  seller : seller
   created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+
+  @field_validator("sku",mode="after")
+  @classmethod
+  def validate_sku(cls,value:str) -> str:
+      last = str(value).strip().split("-")[-1]
+      if not (len(last) == 3 and last.isdigit()):
+        raise ValueError(f"SKU must end with a 3-digit sequence, like `-239`, got `-{last}` instead")
+      return value
+  
+  @model_validator(mode="after")
+  def validate_stock_is_active(self) -> "Item":
+    if self.is_active and self.stock == 0:
+        raise ValueError("`is_active` must be `False` when `stock` is 0, got `True` instead")
+    return self
+  
+  @computed_field(return_type=float)
+  @property
+  def final_price(self):
+    fp = self.price - (self.price * (self.discount_percent/100))
+    return round(fp,2)
+  
