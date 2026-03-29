@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Query, HTTPException,Path
 import numpy as np
-from Data.product import process_data
+from Data.product import process_data, add_data
 from .schema.product_rule import Item
-from uuid import UUID
+from uuid import UUID, uuid4
 
 app = FastAPI()
 
@@ -73,4 +73,13 @@ def product_query(
 
 @app.post("/product",status_code=201)
 def create_product(product:Item):
-    return product
+    product = product.model_dump(mode="json")
+    product["id"] = uuid4
+    try:
+        add_data(product)
+        return {
+            "message":"product added successfully",
+            "product":product
+        }
+    except Exception as e:
+        return {"error":str(e),"period":"adding product"}
