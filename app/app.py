@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Query, HTTPException,Path
 import numpy as np
-from product import process_data
-from schema.product_rule import Item
+from Data.product import process_data
+from .schema.product_rule import Item
 from uuid import UUID
 
 app = FastAPI()

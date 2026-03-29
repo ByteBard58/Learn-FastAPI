@@ -3,7 +3,7 @@ from pydantic import (BaseModel, Field, AnyUrl,
 from typing import Annotated, Literal, List, Optional
 from datetime import datetime, timezone
 from uuid import UUID
-from product import process_data
+from Data.product import process_data
 
 whole_list = process_data()
 verified_sellers= [r["seller"] for r in whole_list]
