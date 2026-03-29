@@ -2,6 +2,7 @@ from fastapi import FastAPI, Query, HTTPException,Path
 import numpy as np
 from product import process_data
 from schema.product_rule import Item
+from uuid import UUID
 
 app = FastAPI()
 
@@ -12,17 +13,15 @@ def home():
 
 @app.get("/product/{id}")
 def products(
-    id:str = Path(
-        min_length= 36,
-        max_length= 36,
-        description="Provide the id of the product",
+    id:UUID = Path(
+        description="UUID of the product",
         examples="0005a4ea-ce3f-4dd7-bee0-f4ccc70fea6a"
     )
 ):
     whole_list = process_data()
-    dickt:list[dict] = [r for r in whole_list if r["id"] == id]
+    dickt:list[dict] = [r for r in whole_list if r["id"] == str(id)]
     if not dickt:
-        raise HTTPException(status_code=404, detail=f"Product of id = {id} not found")
+        raise HTTPException(status_code=404, detail=f"Product of id = {str(id)} not found")
     else:
         return dickt
 
