@@ -74,7 +74,7 @@ def product_query(
 @app.post("/product",status_code=201)
 def create_product(product:Item):
     product = product.model_dump(mode="json")
-    product["id"] = uuid4
+    product["id"] = str(uuid4())
     try:
         add_data(product)
         return {
@@ -82,4 +82,4 @@ def create_product(product:Item):
             "product":product
         }
     except Exception as e:
-        return {"error":str(e),"period":"adding product"}
+        raise HTTPException(status_code=400, detail=str(e))

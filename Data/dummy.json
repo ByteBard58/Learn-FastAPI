@@ -103,5 +103,77 @@
       "website": "https://www.sonycenter.in"
     },
     "created_at": "2024-01-20T00:00:00Z"
+  },
+  {
+    "id": "60bef1a2-f306-46a4-b411-a95632839a52",
+    "sku": "XIAO-359GB-991",
+    "name": "Xiaomi Model Pro",
+    "description": "string",
+    "category": "mobiles",
+    "brand": "Lenovo",
+    "price": 579.5,
+    "currency": "INR",
+    "discount_percent": 0.0,
+    "stock": 123,
+    "is_active": true,
+    "rating": 5.0,
+    "tags": [
+      "gaming",
+      "chocolate"
+    ],
+    "image_urls": [
+      "https://example.com/"
+    ],
+    "dimensions_cm": {
+      "length": 1.0,
+      "width": 1.0,
+      "height": 1.0,
+      "volume": 1.0
+    },
+    "seller": {
+      "seller_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+      "name": "Asus Exclusive",
+      "email": "support@asusexclusive.in",
+      "website": "https://www.asusexclusive.in/"
+    },
+    "created_at": "2026-03-29T05:27:15.840000Z",
+    "final_price": 579.5
+  },
+  {
+    "id": "5cb1c44a-cc73-4b9c-91c3-9ddcad136212",
+    "sku": "HP-156GB-100",
+    "name": "HP Model X",
+    "description": null,
+    "category": "laptops",
+    "brand": "HP",
+    "price": 179728.0,
+    "currency": "INR",
+    "discount_percent": 0.0,
+    "stock": 86,
+    "is_active": true,
+    "rating": 4.2,
+    "tags": [
+      "ssd",
+      "charger",
+      "camera"
+    ],
+    "image_urls": [
+      "https://cdn.example.com/hp/front.png",
+      "https://cdn.example.com/hp/back.png"
+    ],
+    "dimensions_cm": {
+      "length": 32.2,
+      "width": 22.8,
+      "height": 2.8,
+      "volume": 2055.65
+    },
+    "seller": {
+      "seller_id": "ff912724-f541-47f7-b80b-ab9a2c0ef289",
+      "name": "HP World",
+      "email": "support@hpworld.in",
+      "website": "https://www.hpworld.in/"
+    },
+    "created_at": "2026-03-29T06:10:30.261076Z",
+    "final_price": 179728.0
   }
 ]

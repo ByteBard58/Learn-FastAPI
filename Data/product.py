@@ -18,7 +18,7 @@ def save_data(value:List[dict], target = TARGET) -> None:
 
 def add_data(value:dict) -> List[dict]:
   output = process_data()
-  if {p["sku"]==value["sku"] for p in output}:
+  if any(p["sku"] == value["sku"] for p in output):
     raise ValueError(f"SKU={value["sku"]} already exists")
   output.append(value)
   save_data(output)

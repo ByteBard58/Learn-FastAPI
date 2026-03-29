@@ -4,8 +4,11 @@ from typing import Annotated, Literal, List, Optional
 from datetime import datetime, timezone
 from uuid import UUID
 from Data.product import process_data
+from pathlib import Path
 
-whole_list = process_data()
+TARGET_DB = Path("Data","products.json")
+
+whole_list = process_data(TARGET_DB)
 verified_sellers= [r["seller"] for r in whole_list]
 verified_emails = {e["email"].lower() for e in verified_sellers}
 verified_websites = {w["website"].strip().rstrip("/") for w in verified_sellers}
@@ -81,7 +84,7 @@ class Item(BaseModel):
     examples=["mobiles","laptops"]
   )]
   brand : Annotated[str,Field(
-    ..., min_length=3, max_length=12, 
+    ..., min_length=1, max_length=15, 
     description="Brand of the product (required)",
     examples=["Lenovo","Apple"]
   )]
