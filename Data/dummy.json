@@ -175,5 +175,42 @@
     },
     "created_at": "2026-03-29T06:10:30.261076Z",
     "final_price": 179728.0
+  },
+  {
+    "id": "67c61781-2c7e-4af1-98a1-340307fa4db7",
+    "sku": "SAMS-383GB-094",
+    "name": "Samsung Model Max",
+    "description": "Official Samsung product with manufacturer warranty",
+    "category": "laptops",
+    "brand": "Samsung",
+    "price": 89469.0,
+    "currency": "INR",
+    "discount_percent": 10.0,
+    "stock": 37,
+    "is_active": true,
+    "rating": 4.4,
+    "tags": [
+      "gaming",
+      "ssd",
+      "laptop"
+    ],
+    "image_urls": [
+      "https://cdn.example.com/samsung/front.png",
+      "https://cdn.example.com/samsung/back.png"
+    ],
+    "dimensions_cm": {
+      "length": 27.1,
+      "width": 22.0,
+      "height": 2.9,
+      "volume": 1728.98
+    },
+    "seller": {
+      "seller_id": "10c5a2ed-9d63-40ef-85f2-9700294fb743",
+      "name": "Samsung India",
+      "email": "support@samsungindia.in",
+      "website": "https://www.samsungindia.in/"
+    },
+    "created_at": "2026-03-29T06:18:22.309034Z",
+    "final_price": 80522.1
   }
 ]
