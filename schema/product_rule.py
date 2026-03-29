@@ -3,6 +3,12 @@ from pydantic import (BaseModel, Field, AnyUrl,
 from typing import Annotated, Literal, List, Optional
 from datetime import datetime, timezone
 from uuid import UUID
+from product import process_data
+
+whole_list = process_data()
+verified_sellers= [r["seller"] for r in whole_list]
+verified_emails = {e["email"].lower() for e in verified_sellers}
+verified_websites = {w["website"].strip().rstrip("/") for w in verified_sellers}
 
 class seller(BaseModel):
    seller_id: UUID
@@ -11,11 +17,27 @@ class seller(BaseModel):
       description="Name of the seller (required)", examples=["Asus Exclusive","Lenovo Store"]
    )]
    email : Annotated[EmailStr,Field(
-      ..., description="Email address of the seller (required)"
+      ..., description="Email address of the seller (required)",
+      examples=["support@asusexclusive.in"]
    )]
    website : Annotated[AnyUrl,Field(
-      ..., description="Website URL of the seller (required)"
+      ..., description="Website URL of the seller (required)",
+      examples=["https://www.asusexclusive.in"]
    )]
+
+   @field_validator("email",mode="after")
+   @classmethod
+   def validate_email(cls,value:EmailStr) -> EmailStr:
+      if str(value).lower() not in verified_emails:
+         raise ValueError(f"Provided email must be verified, got {str(value)} instead.")
+      return value
+   
+   @field_validator("website",mode="after")
+   @classmethod
+   def validate_web(cls, value:AnyUrl) -> AnyUrl:
+      if str(value).rstrip("/") not in verified_websites:
+         raise ValueError(f"Provided website must be verified, got {str(value)} instead.")
+      return value
 
 class dimensions_cm(BaseModel):
   length : Annotated[float,Field(
@@ -33,7 +55,7 @@ class dimensions_cm(BaseModel):
 
   @computed_field(return_type=float)
   @property
-  def volume(self):
+  def volume(self) -> float:
      volume = self.length * self.width * self.height
      return round(volume,2)
 
@@ -114,7 +136,7 @@ class Item(BaseModel):
   
   @computed_field(return_type=float)
   @property
-  def final_price(self):
+  def final_price(self) -> float:
     fp = self.price - (self.price * (self.discount_percent/100))
     return round(fp,2)
   
