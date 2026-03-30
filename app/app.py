@@ -84,7 +84,7 @@ def create_product(product:Item):
         raise HTTPException(status_code=400, detail=str(e))
 
 @app.delete("/product/{sku}")
-def rm_product(sku:str = Path(
+def remove_product(sku:str = Path(
     ..., max_length= 14, min_length=12, 
     pattern=r"^[A-Z]+-\d+GB-\d+$",
     description="SKU (stock keeping unit) of the product",
