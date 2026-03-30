@@ -24,6 +24,16 @@ def add_data(value:dict) -> List[dict]:
   save_data(output)
   return output
 
+def delete_data(sku:str) -> dict:
+  whole_list = process_data()
+  target:list[dict] = [t for t in whole_list if str(t["sku"]) == sku]
+  if not target:
+    raise ValueError(f"Unable to find SKU = {sku} in the database. Deletion Unsuccessful.")
+  whole_list = [r for r in whole_list if r not in target]
+  save_data(whole_list)
+
+  return {"message":"Deletion successful", "item_deleted":target}
+
 def main() -> None:
   process_data()
 

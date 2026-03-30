@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Query, HTTPException,Path
 import numpy as np
-from Data.product import process_data, add_data
+from Data.product import process_data, add_data, delete_data 
 from .schema.product_rule import Item
 from uuid import UUID, uuid4
 
@@ -82,3 +82,17 @@ def create_product(product:Item):
         }
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+@app.delete("/product/{sku}")
+def rm_product(sku:str = Path(
+    ..., max_length= 14, min_length=12, 
+    pattern=r"^[A-Z]+-\d+GB-\d+$",
+    description="SKU (stock keeping unit) of the product",
+    examples=["HP-156GB-100","SONY-374GB-087","XIAO-359GB-991"]
+)):
+    try:
+        to_r = delete_data(sku)
+        return to_r
+    except Exception as e:
+        raise HTTPException(status_code=400,detail=str(e))
+        
