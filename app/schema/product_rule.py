@@ -149,16 +149,13 @@ class seller_put(BaseModel):
    seller_id: UUID
    name : Annotated[Optional[str],Field(
       min_length=3,max_length=25,
-      description="Name of the seller (optional)", 
-      examples=["Asus Exclusive","Lenovo Store"]
+      description="Name of the seller (optional)"
    )] = None
    email : Annotated[Optional[EmailStr],Field(
-      description="Email address of the seller (optional)",
-      examples=["support@asusexclusive.in"]
+      description="Email address of the seller (optional)"
    )] = None
    website : Annotated[Optional[AnyUrl],Field(
-      description="Website URL of the seller (optional)",
-      examples=["https://www.asusexclusive.in"]
+      description="Website URL of the seller (optional)"
    )] = None
 
    @field_validator("email",mode="after")
@@ -198,13 +195,11 @@ class dimensions_cm_put(BaseModel):
 class Item_put(BaseModel):
   sku : Annotated[Optional[str],Field(
     min_length= 4, max_length= 30,
-    description= "Stock Keeping Unit (optional)",
-    examples=["XIAO-359GB-001","REAL-84GB-004"]
+    description= "Stock Keeping Unit (optional)"
   )] = None
   name : Annotated[Optional[str], Field(
     min_length=3, max_length=40, 
-    description="Name of the product (optional)",
-    examples=["Xiaomi Model Pro","Realme Model X"]
+    description="Name of the product (optional)"
   )] = None
   description: Annotated[Optional[str],Field(
     min_length=5, max_length=100, 
@@ -212,18 +207,15 @@ class Item_put(BaseModel):
   )] = None
   category: Annotated[Optional[str], Field(
     min_length=3, max_length=14, 
-    description="Category of the product (optional)",
-    examples=["mobiles","laptops"]
+    description="Category of the product (optional)"
   )] = None
   brand : Annotated[Optional[str],Field(
     min_length=1, max_length=15, 
-    description="Brand of the product (optional)",
-    examples=["Lenovo","Apple"]
+    description="Brand of the product (optional)"
   )] = None
   price : Annotated[Optional[float],Field(
     gt=0, 
-    description="Price of the product (optional)",
-    examples=[579.5,9999.0,374.5,34999.0]
+    description="Price of the product (optional)"
   )] = None
   currency : Literal["INR"] = "INR"
   discount_percent : Annotated[Optional[float],Field(
@@ -232,8 +224,7 @@ class Item_put(BaseModel):
   )] = None
   stock : Annotated[Optional[int],Field(
     ge = 0,
-    description="Amount of products in stock (optional)", 
-    examples=[123,10,23]
+    description="Amount of products in stock (optional)"
   )] = None
   is_active : Annotated[Optional[bool],Field(
     description="Activation Status in boolean (optional)"
@@ -244,8 +235,7 @@ class Item_put(BaseModel):
   )] = None
   tags : Annotated[Optional[List[str]],Field(
     description="Tags assigned to the product (optional)",
-    max_length=10, 
-    examples=[["gaming","chocolate"],["drinks","clothes"]]
+    max_length=10
   )] = None
   image_urls : Annotated[Optional[List[AnyUrl]],Field(
     min_length=1,

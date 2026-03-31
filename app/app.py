@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Query, HTTPException,Path
 import numpy as np
-from Data.product import process_data, add_data, delete_data 
-from .schema.product_rule import Item
+from Data.product import process_data, add_data, delete_data, update_data as ud_p
+from .schema.product_rule import Item, Item_put
 from uuid import UUID, uuid4
 
 app = FastAPI()
@@ -95,4 +95,21 @@ def remove_product(sku:str = Path(
         return to_r
     except Exception as e:
         raise HTTPException(status_code=400,detail=str(e))
-        
+    
+@app.put("/product/{id}")
+def update_data(updated_data:Item_put, id:UUID = Path(
+    ..., description="UUID of the product (required)"
+)) -> dict:
+    whole_list = process_data()
+    existing = [w for w in whole_list if w["id"] == str(id)]
+    if not existing:
+        raise HTTPException(status_code=404,
+            detail=f"Unable to find id = {id} in the database. Update unsuccessful.")
+    existing = Item.model_validate(existing[0])
+    item_update = updated_data.model_dump(exclude_unset=True)
+    updated_item = existing.model_copy(update=item_update)
+    try:
+        msg:dict = ud_p(id=id,value=updated_item.model_dump())
+        return msg 
+    except Exception as e:
+        raise HTTPException(status_code=400,detail=str(e))

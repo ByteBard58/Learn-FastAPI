@@ -39,19 +39,17 @@ def delete_data_by_dict(value:dict,prev_list:list[dict] = process_data()) -> Non
   prev_list = [p for p in prev_list if not p == value]
   save_data(prev_list)
 
-def update_data(id:UUID,value:dict):
+def update_data(id:UUID,value:dict) -> dict:
   whole_list = process_data()
   target:list[dict] = [r for r in whole_list if r["id"] == str(id)]
   if not target:
     raise ValueError(f"Unable to find id = {id} in the database. Update unsuccessful.")
   target:dict = target[0]
   delete_data_by_dict(target,whole_list)
-  try:
-    add_data(value)
-    return {"message":"Update successful", "item_updated_before":target,
-            "item_updated_after":value}
-  except Exception as e:
-    return {"error":str(e),"period":"while updating"}
+
+  add_data(value)
+  return {"message":"Update successful", "item_updated_before":target,
+          "item_updated_after":value}
 
 def main() -> None:
   process_data()
