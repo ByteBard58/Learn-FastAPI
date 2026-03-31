@@ -13,6 +13,7 @@ verified_sellers= [r["seller"] for r in whole_list]
 verified_emails = {e["email"].lower() for e in verified_sellers}
 verified_websites = {w["website"].strip().rstrip("/") for w in verified_sellers}
 
+#-------Normal Validation-------
 class seller(BaseModel):
    seller_id: UUID
    name : Annotated[str,Field(
@@ -143,3 +144,139 @@ class Item(BaseModel):
     fp = self.price - (self.price * (self.discount_percent/100))
     return round(fp,2)
   
+#-------Update(PUT) Validation-------
+class seller_put(BaseModel):
+   seller_id: UUID
+   name : Annotated[Optional[str],Field(
+      min_length=3,max_length=25,
+      description="Name of the seller (optional)", 
+      examples=["Asus Exclusive","Lenovo Store"]
+   )] = None
+   email : Annotated[Optional[EmailStr],Field(
+      description="Email address of the seller (optional)",
+      examples=["support@asusexclusive.in"]
+   )] = None
+   website : Annotated[Optional[AnyUrl],Field(
+      description="Website URL of the seller (optional)",
+      examples=["https://www.asusexclusive.in"]
+   )] = None
+
+   @field_validator("email",mode="after")
+   @classmethod
+   def validate_email(cls,value:EmailStr) -> EmailStr:
+      if str(value).lower() not in verified_emails:
+         raise ValueError(f"Provided email must be verified, got {str(value)} instead.")
+      return value
+   
+   @field_validator("website",mode="after")
+   @classmethod
+   def validate_web(cls, value:AnyUrl) -> AnyUrl:
+      if str(value).rstrip("/") not in verified_websites:
+         raise ValueError(f"Provided website must be verified, got {str(value)} instead.")
+      return value
+
+class dimensions_cm_put(BaseModel):
+  length : Annotated[Optional[float],Field(
+     description="Length of the product in cm unit (optional)",
+     gt=0
+  )] = None
+  width : Annotated[Optional[float],Field(
+     description="Width of the product in cm unit (optional)",
+     gt=0
+  )] = None
+  height : Annotated[Optional[float],Field(
+     description="Height of the product in cm unit (optional)",
+     gt=0
+  )] = None
+
+  @computed_field(return_type=float)
+  @property
+  def volume(self) -> float:
+     volume = self.length * self.width * self.height
+     return round(volume,2)
+
+class Item_put(BaseModel):
+  sku : Annotated[Optional[str],Field(
+    min_length= 4, max_length= 30,
+    description= "Stock Keeping Unit (optional)",
+    examples=["XIAO-359GB-001","REAL-84GB-004"]
+  )] = None
+  name : Annotated[Optional[str], Field(
+    min_length=3, max_length=40, 
+    description="Name of the product (optional)",
+    examples=["Xiaomi Model Pro","Realme Model X"]
+  )] = None
+  description: Annotated[Optional[str],Field(
+    min_length=5, max_length=100, 
+    description="Description of the product (optional)"
+  )] = None
+  category: Annotated[Optional[str], Field(
+    min_length=3, max_length=14, 
+    description="Category of the product (optional)",
+    examples=["mobiles","laptops"]
+  )] = None
+  brand : Annotated[Optional[str],Field(
+    min_length=1, max_length=15, 
+    description="Brand of the product (optional)",
+    examples=["Lenovo","Apple"]
+  )] = None
+  price : Annotated[Optional[float],Field(
+    gt=0, 
+    description="Price of the product (optional)",
+    examples=[579.5,9999.0,374.5,34999.0]
+  )] = None
+  currency : Literal["INR"] = "INR"
+  discount_percent : Annotated[Optional[float],Field(
+    ge = 0, le = 100,
+    description="Percentage of discount (optional)"
+  )] = None
+  stock : Annotated[Optional[int],Field(
+    ge = 0,
+    description="Amount of products in stock (optional)", 
+    examples=[123,10,23]
+  )] = None
+  is_active : Annotated[Optional[bool],Field(
+    description="Activation Status in boolean (optional)"
+  )] = None
+  rating : Annotated[Optional[float],Field(
+    ge = 0, le = 5,
+    description="Rating of the product (optional)"
+  )] = None
+  tags : Annotated[Optional[List[str]],Field(
+    description="Tags assigned to the product (optional)",
+    max_length=10, 
+    examples=[["gaming","chocolate"],["drinks","clothes"]]
+  )] = None
+  image_urls : Annotated[Optional[List[AnyUrl]],Field(
+    min_length=1,
+    description="URLs of images of the product (optional)"
+  )] = None
+  dimensions_cm : Annotated[Optional[dimensions_cm_put],Field(
+    description="Dimensions of the product (optional)"
+  )] = None
+  seller : Annotated[Optional[seller_put],Field(
+    description="Seller information (optional)"
+  )] = None
+  created_at: Annotated[Optional[datetime],Field(
+    description="Creation timestamp (optional)"
+  )] = None
+
+  @field_validator("sku",mode="after")
+  @classmethod
+  def validate_sku(cls,value:str) -> str:
+      last = str(value).strip().split("-")[-1]
+      if not (len(last) == 3 and last.isdigit()):
+        raise ValueError(f"SKU must end with a 3-digit sequence, like `-239`, got `-{last}` instead")
+      return value
+  
+  @model_validator(mode="after")
+  def validate_stock_is_active(self) -> "Item":
+    if self.is_active and self.stock == 0:
+        raise ValueError("`is_active` must be `False` when `stock` is 0, got `True` instead")
+    return self
+  
+  @computed_field(return_type=float)
+  @property
+  def final_price(self) -> float:
+    fp = self.price - (self.price * (self.discount_percent/100))
+    return round(fp,2)
