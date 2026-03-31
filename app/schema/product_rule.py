@@ -186,11 +186,11 @@ class dimensions_cm_put(BaseModel):
      gt=0
   )] = None
 
-  @computed_field(return_type=float)
-  @property
-  def volume(self) -> float:
-     volume = self.length * self.width * self.height
-     return round(volume,2)
+  # @computed_field(return_type=float)
+  # @property
+  # def volume(self) -> float:
+  #    volume = self.length * self.width * self.height
+  #    return round(volume,2)
 
 class Item_put(BaseModel):
   sku : Annotated[Optional[str],Field(
@@ -265,8 +265,8 @@ class Item_put(BaseModel):
         raise ValueError("`is_active` must be `False` when `stock` is 0, got `True` instead")
     return self
   
-  @computed_field(return_type=float)
-  @property
-  def final_price(self) -> float:
-    fp = self.price - (self.price * (self.discount_percent/100))
-    return round(fp,2)
+  # @computed_field(return_type=float)
+  # @property
+  # def final_price(self) -> float:
+  #   fp = self.price - (self.price * (self.discount_percent/100))
+  #   return round(fp,2)

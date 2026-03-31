@@ -106,10 +106,10 @@ def update_data(updated_data:Item_put, id:UUID = Path(
         raise HTTPException(status_code=404,
             detail=f"Unable to find id = {id} in the database. Update unsuccessful.")
     existing = Item.model_validate(existing[0])
-    item_update = updated_data.model_dump(exclude_unset=True)
+    item_update = updated_data.model_dump(exclude_unset=True, mode="json")
     updated_item = existing.model_copy(update=item_update)
     try:
-        msg:dict = ud_p(id=id,value=updated_item.model_dump())
+        msg:dict = ud_p(id=id,value=updated_item.model_dump(mode="json"))
         return msg 
     except Exception as e:
         raise HTTPException(status_code=400,detail=str(e))
