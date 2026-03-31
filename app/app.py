@@ -97,7 +97,7 @@ def remove_product(sku:str = Path(
         raise HTTPException(status_code=400,detail=str(e))
     
 @app.put("/product/{id}")
-def update_data(updated_data:Item_put, id:UUID = Path(
+def update_data(value:Item_put, id:UUID = Path(
     ..., description="UUID of the product (required)"
 )) -> dict:
     whole_list = process_data()
@@ -106,8 +106,8 @@ def update_data(updated_data:Item_put, id:UUID = Path(
         raise HTTPException(status_code=404,
             detail=f"Unable to find id = {id} in the database. Update unsuccessful.")
     existing = Item.model_validate(existing[0])
-    item_update = updated_data.model_dump(exclude_unset=True, mode="json")
-    updated_item = existing.model_copy(update=item_update)
+    incoming_update = value.model_dump(exclude_unset=True, mode="json")
+    updated_item = existing.model_copy(update=incoming_update)
     try:
         msg:dict = ud_p(id=id,value=updated_item.model_dump(mode="json"))
         return msg 
