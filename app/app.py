@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Query, HTTPException,Path, Depends
+from fastapi.responses import JSONResponse
 import numpy as np
 from Data.product import process_data, add_data, delete_data, update_data as ud_p
 from .schema.product_rule import Item, Item_put
@@ -9,7 +10,10 @@ app = FastAPI()
 @app.get("/",response_model=dict)
 def home():
     dictt = {"pi": float(np.pi), "message":"wake up, daddy's home"}
-    return dictt
+    return JSONResponse(
+        content=dictt,
+        status_code=200
+    )
 
 @app.get("/product/{id}",response_model=list[dict])
 def products(
@@ -23,7 +27,10 @@ def products(
     if not dickt:
         raise HTTPException(status_code=404, detail=f"Product of id = {str(id)} not found")
     else:
-        return dickt
+        return JSONResponse(
+            content=dickt,
+            status_code=200
+        )
 
 @app.get("/product",response_model=dict)
 def product_query(
@@ -69,7 +76,10 @@ def product_query(
             results = sorted(results,key=lambda x: x.get("price"),reverse=reverse)
             return {"total":len(results),"items":results}
     
-    return {"total":len(results),"items":results}
+    to_return = {"total":len(results),"items":results}
+    return JSONResponse(
+        content= to_return, status_code=200
+    )
 
 @app.post("/product",status_code=201,response_model=dict)
 def create_product(product:Item) -> dict:
