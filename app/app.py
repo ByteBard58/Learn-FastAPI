@@ -5,7 +5,7 @@ from Data.product import process_data, add_data, delete_data, update_data as ud_
 from .schema.product_rule import Item, Item_put
 from uuid import UUID, uuid4
 
-app = FastAPI()
+app = FastAPI(title="Product Management API",version="1.0")
 
 @app.get("/",response_model=dict)
 def home():
