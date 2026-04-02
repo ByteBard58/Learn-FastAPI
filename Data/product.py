@@ -4,7 +4,7 @@ from typing import List
 from uuid import UUID
 import os
 
-TARGET = Path("Data","dummy.json")
+TARGET = Path("Data","products.json")
 
 def process_data(target = TARGET) -> List[dict]:
   if not os.path.exists(TARGET):
