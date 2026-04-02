@@ -23,9 +23,8 @@ build/
 *.dll
 *.so
 *.dylib
-model.pkl
-scaler.pkl
 instance/
 shit/
 *.db
 .vscode/
+Data/dummy.json
