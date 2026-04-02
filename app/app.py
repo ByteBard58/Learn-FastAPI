@@ -3,7 +3,10 @@ from fastapi.responses import JSONResponse
 import numpy as np
 from Data.product import process_data, add_data, delete_data, update_data as ud_p
 from .schema.product_rule import Item, Item_put
-from uuid import UUID, uuid4
+from uuid import UUID
+
+def with_computed(products: list[dict]) -> list[dict]:
+    return [Item.model_validate(p).model_dump(mode="json") for p in products]
 
 app = FastAPI(title="Product Management API",version="1.0")
 
@@ -22,7 +25,7 @@ def products(
         examples="0005a4ea-ce3f-4dd7-bee0-f4ccc70fea6a"
     ), dep = Depends(process_data)
 ) -> list[dict]:
-    whole_list = dep
+    whole_list = with_computed(dep)
     dickt:list[dict] = [r for r in whole_list if r["id"] == str(id)]
     if not dickt:
         raise HTTPException(status_code=404, detail=f"Product of id = {str(id)} not found")
@@ -58,7 +61,7 @@ def product_query(
   ), dep = Depends(process_data)
   ) -> dict:
 
-    results = dep
+    results = with_computed(dep)
     if name is not None:
         name_mod:str = name.strip().lower()
         results = [r for r in results if name_mod in r["name"].lower()]
@@ -117,7 +120,13 @@ def update_data(value:Item_put, id:UUID = Path(
             detail=f"Unable to find id = {id} in the database. Update unsuccessful.")
     existing = Item.model_validate(existing[0])
     incoming_update = value.model_dump(exclude_unset=True, mode="json")
-    updated_item = existing.model_copy(update=incoming_update)
+    existing_dict = existing.model_dump(mode="json")
+    for key_inc,val_inc in incoming_update.items():
+        if isinstance(val_inc,dict) and isinstance(existing_dict.get(key_inc),dict):
+            existing_dict[key_inc] = {**existing_dict.get(key_inc),**val_inc}
+        else:
+            existing_dict[key_inc] = val_inc
+    updated_item = Item.model_validate(existing_dict)
     try:
         msg:dict = ud_p(id=id,value=updated_item.model_dump(mode="json"))
         return msg 
